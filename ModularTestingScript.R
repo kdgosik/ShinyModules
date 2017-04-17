@@ -16,7 +16,8 @@ server <- function(input, output, session) {
                content = paste0("item", 1:10),
                start = seq(as.Date("2016-01-01"), as.Date("2016-10-01"), "month"),
                end = seq(as.Date("2016-02-01"), as.Date("2016-11-01"), "month"),
-               group = c(rep("group1", 4), rep("group2", 6))
+               group = c(rep("group1", 4), rep("group2", 6)),
+               stringsAsFactors = FALSE
     )
   })
   

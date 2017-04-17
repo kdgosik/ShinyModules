@@ -53,7 +53,8 @@ TimelineServer <- function(input, output, session, data) {
     vis_data <- data.frame(id = id,
                            content = content,
                            start = start, 
-                           end = end)
+                           end = end,
+                           group = group)
     group_data <- data.frame(id = unique(group), 
                              content = unique(group))
     
@@ -76,7 +77,7 @@ TimelineServer <- function(input, output, session, data) {
     }else{
 
       timevis(data = resultsdata()[["data"]],
-              group = resultsdata()[["group"]],
+              groups = resultsdata()[["group"]],
               options = list(editable = TRUE,
                              multiselect = TRUE
               )
@@ -86,7 +87,5 @@ TimelineServer <- function(input, output, session, data) {
     }
 
     })
-  
-  output$table1 <- renderDataTable({ resultsdata() })
-  
+
 }
