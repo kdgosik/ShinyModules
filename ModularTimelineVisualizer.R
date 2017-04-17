@@ -10,15 +10,16 @@ library(lubridate)
 TimelineUI <- function(id) {
   ns <- NS(id)
   
-  list(
-    div(actionButton(ns("show_timeline"), "Show Timeline")),
-    div(selectizeInput(ns("content"), "Select Content Column", choices = NULL)),
-    div(selectizeInput(ns("start"), "Select Content Column", choices = NULL)),
-    div(selectizeInput(ns("end"), "Select Content Column", multiple = TRUE, choices = NULL)),
-    div(selectizeInput(ns("group"), "Select Content Column", multiple = TRUE, choices = NULL)),
-    div(timevisOutput(ns("timeline"))),
-    div(dataTableOutput(ns("table1")))
-  )
+  fillCol(
+    div(
+      actionButton(ns("show_timeline"), "Show Timeline"),
+      selectizeInput(ns("content"), "Select Content Column", choices = NULL),
+      selectizeInput(ns("start"), "Select Content Column", choices = NULL),
+      selectizeInput(ns("end"), "Select Content Column", multiple = TRUE, choices = NULL),
+      selectizeInput(ns("group"), "Select Content Column", multiple = TRUE, choices = NULL),
+      timevisOutput(ns("timeline"))
+      )
+    )
   
 }
 
@@ -44,8 +45,10 @@ TimelineServer <- function(input, output, session, data) {
     id <- 1:NROW(data())
     content <- data()[[input$content]]
     start <- data()[[input$start]]
-    end <- ifelse(is.null(input$end), NA, data()[[input$end]])
-    group <- ifelse(is.null(input$group), NA,  data()[[input$group]])
+    end <- tryCatch({data()[[input$end]]}, error = function(e) NULL)
+    group <- tryCatch({data()[[input$group]]}, error = function(e) NULL)
+    if( is.null(end) ) end <- NA
+    if( is.null(group) ) group <- NA
 
     vis_data <- data.frame(id = id,
                            content = content,
@@ -60,12 +63,7 @@ TimelineServer <- function(input, output, session, data) {
   })
   
   
-  output$timeline <- renderTimevis({
-    
-    # timevis(data = resultsdata()[["data"]],
-    #         group = resultsdata()[["group"]])
-    
-
+  output$timeline <- renderTimevis({ 
     
     if( is.null(input$group) ){
 
