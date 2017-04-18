@@ -12,6 +12,7 @@ library(flexdashboard)
 library(shiny)
 rm(list=ls()); gc(reset = TRUE)
 source("ModularTimelineVisualizer.R")
+source("ModularCSVFileInput.R")
 ```
 
 Column {data-width=500}
@@ -20,7 +21,20 @@ Column {data-width=500}
 ### Chart A
 
 ```{r}
- TimelineUI("timelineplot")
+  # Data <- reactive({
+  #   data.frame(id = 1:10,
+  #              content = paste0("item", 1:10),
+  #              start = seq(as.Date("2016-01-01"), as.Date("2016-10-01"), "month")
+  #   )
+  # })
+
+  Data <- callModule(csvFileInputServer, "input_data", stringsAsFactors = FALSE)
+
+  callModule(TimelineServer, "timelineplot", data = Data)
+```
+
+```{r}
+csvFileInputUI("input_data")
 ```
 
 Column {data-width=500}
@@ -29,13 +43,9 @@ Column {data-width=500}
 ### Chart B
 
 ```{r}
-  Data <- reactive({
-    data.frame(id = 1:10,
-               content = paste0("item", 1:10),
-               start = seq(as.Date("2016-01-01"), as.Date("2016-10-01"), "month")
-    )
-  })
-  
-  callModule(TimelineServer, "timelineplot", data = Data)
+ TimelineUI("timelineplot")
 ```
+
+
+
 

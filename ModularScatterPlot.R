@@ -5,22 +5,23 @@ library(plotly)
 scatterUI <- function(id) {
   ns <- NS(id)
   
-  list(
-    div(selectInput)
-    div(sliderInput(ns("slider1"), label = "Limit points", min = 5, max = 32, value = 10)),
-    div(style="display: inline-block; height:220px;", plotlyOutput(ns("plot1")))
+  fillCol(
+    div(
+    sliderInput(ns("slider1"), label = "Limit points", min = 5, max = 32, value = 10),
+    style="display: inline-block; height:220px;", plotlyOutput(ns("plot1"))
+    )
   )
 }
 
 
 
 # MODULE Server
-scatterServer <- function(input, output, session, data, var1, var2, ptshape, col1, col2) {
+scatterServer <- function(input, output, session, data, var1, var2, ptshape = 1, col1 = 1) {
   
   resultdata <- reactive({
-    inpt_slider <- input$slider1
+    #inpt_slider <- input$slider1
     
-    data()[1 : inpt_slider, ]
+    data()[1 : input$slider1, ]
     
   })
   

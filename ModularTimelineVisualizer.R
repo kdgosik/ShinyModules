@@ -79,7 +79,8 @@ TimelineServer <- function(input, output, session, data) {
       timevis(data = resultsdata()[["data"]],
               groups = resultsdata()[["group"]],
               options = list(editable = TRUE,
-                             multiselect = TRUE
+                             multiselect = TRUE,
+                             orientation = "top"
               )
       )
 

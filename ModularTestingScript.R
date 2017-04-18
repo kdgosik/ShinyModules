@@ -1,27 +1,33 @@
 library(shiny)
 rm(list=ls()); gc(reset = TRUE)
 source("ModularTimelineVisualizer.R")
+source("ModularCSVFileInput.R")
+source("ModularScatterPlot.R")
 
 ui <- fluidPage(
 
-  TimelineUI("timelineplot")
+  sidebarLayout(
+    
+    sidebarPanel(
+      csvFileInputUI("input_data")
+    ),
+    
+    mainPanel(
+      TimelineUI("timelineplot"),
+      scatterUI("scatter_id")
+    )
+    
+  )
   
 )
 
 
 server <- function(input, output, session) {
 
-  Data <- reactive({
-    data.frame(id = 1:10,
-               content = paste0("item", 1:10),
-               start = seq(as.Date("2016-01-01"), as.Date("2016-10-01"), "month"),
-               end = seq(as.Date("2016-02-01"), as.Date("2016-11-01"), "month"),
-               group = c(rep("group1", 4), rep("group2", 6)),
-               stringsAsFactors = FALSE
-    )
-  })
+  Data <- callModule(csvFileInputServer, "input_data", stringsAsFactors = FALSE)
   
   callModule(TimelineServer, "timelineplot", data = Data)
+  callModule(scatterServer, "scatter_id", data = reactive({mtcars}), var1 = "mpg", var2 = "disp", ptshape = 1, col1 = 1)
 
 }
 
