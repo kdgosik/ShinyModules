@@ -1,2 +1,2 @@
-# ShinyModulars
-Repository for Modulars created in shiny
+# ShinyModules
+Repository for Modules created in shiny
