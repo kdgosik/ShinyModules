@@ -6,7 +6,7 @@ library(dplyr)
 
 
 pgsrc <-
-  read.csv( 'creds.csv', stringsAsFactors = FALSE) %$%
+  read.csv( '/projects/creds.csv', stringsAsFactors = FALSE) %$%
   src_postgres(
     host = 'postgres'
     , dbname = 'dev'
@@ -20,7 +20,7 @@ pgsrc <-
 drv <- dbDriver("PostgreSQL")
 # creates a connection to the postgres database
 # note that "con" will be used later in each connection to the database
-con <- read.csv( 'creds.csv', stringsAsFactors = FALSE ) %$%
+con <- read.csv( '/projects/creds.csv', stringsAsFactors = FALSE ) %$%
   dbConnect(drv, dbname = "dev",
             host = "postgres", port = 5432,
             user = username, password = password)
