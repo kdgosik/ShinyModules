@@ -1,5 +1,5 @@
 # Module UI function
-csvFileInputUI <- function(id, label = "CSV file") {
+CSVFileInputUI <- function(id, label = "CSV file") {
   # Create a namespace function using the provided id
   ns <- NS(id)
   
@@ -16,7 +16,7 @@ csvFileInputUI <- function(id, label = "CSV file") {
 
 
 # Module server function
-csvFileInputServer <- function( input, output, session, stringsAsFactors ) {
+CSVFileInputServer <- function( input, output, session, stringsAsFactors ) {
   
   # The selected file, if any
   userFile <- reactive({

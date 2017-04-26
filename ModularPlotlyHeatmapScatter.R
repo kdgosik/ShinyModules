@@ -5,10 +5,12 @@ library(plotly)
 PlotlyHeatmapScatterUI <- function(id) {
   ns <- NS(id)
   
-  list(
-    div(plotlyOutput(ns("heat"))),
-    div(verbatimTextOutput(ns("selection"))),
-    div(plotlyOutput(ns("scatterplot")))
+  fillCol(
+    div(
+      plotlyOutput(ns("heat")),
+      verbatimTextOutput(ns("selection")),
+      plotlyOutput(ns("scatterplot"))
+      )
   )
 }
 

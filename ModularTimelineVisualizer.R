@@ -14,9 +14,9 @@ TimelineUI <- function(id) {
     div(
       actionButton(ns("show_timeline"), "Show Timeline"),
       selectizeInput(ns("content"), "Select Content Column", choices = NULL),
-      selectizeInput(ns("start"), "Select Content Column", choices = NULL),
-      selectizeInput(ns("end"), "Select Content Column", multiple = TRUE, choices = NULL),
-      selectizeInput(ns("group"), "Select Content Column", multiple = TRUE, choices = NULL),
+      selectizeInput(ns("start"), "Select Start Date Column", choices = NULL),
+      selectizeInput(ns("end"), "Select End Date Column", multiple = TRUE, choices = NULL),
+      selectizeInput(ns("group"), "Select Group Column", multiple = TRUE, choices = NULL),
       timevisOutput(ns("timeline"))
       )
     )
@@ -80,7 +80,8 @@ TimelineServer <- function(input, output, session, data) {
               groups = resultsdata()[["group"]],
               options = list(editable = TRUE,
                              multiselect = TRUE,
-                             orientation = "top"
+                             orientation = "top",
+                             groupEditable = TRUE
               )
       )
 

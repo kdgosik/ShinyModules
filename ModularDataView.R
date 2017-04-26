@@ -4,7 +4,7 @@ require(DT)
 DataViewUI <- function(id) {
   ns <- NS(id)
   
-  dataTableOutput(ns("table1"), width = "100%")
+  DT::dataTableOutput(ns("table1"), width = "100%")
   
 }
 

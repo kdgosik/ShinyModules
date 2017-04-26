@@ -2,13 +2,13 @@ library(ggplot2)
 library(plotly)
 
 # MODULE UI
-scatterUI <- function(id) {
+ScatterUI <- function(id) {
   ns <- NS(id)
   
   fillCol(
     div(
-    sliderInput(ns("slider1"), label = "Limit points", min = 5, max = 32, value = 10),
-    style="display: inline-block; height:220px;", plotlyOutput(ns("plot1"))
+      sliderInput(ns("slider1"), label = "Limit points", min = 5, max = 32, value = 10),
+      plotlyOutput(ns("plot1"))
     )
   )
 }
@@ -16,11 +16,10 @@ scatterUI <- function(id) {
 
 
 # MODULE Server
-scatterServer <- function(input, output, session, data, var1, var2, ptshape = 1, col1 = 1) {
+ScatterServer <- function(input, output, session, data, var1, var2, ptshape = 1, col1 = 1) {
   
   resultdata <- reactive({
-    #inpt_slider <- input$slider1
-    
+
     data()[1 : input$slider1, ]
     
   })

@@ -109,7 +109,7 @@ ControlChartUI <- function(id) {
   ns <- NS(id)
   
   list(
-    div(checkboxInput("changepoint", "Find Change Point", value = FALSE)),
+    div(checkboxInput(ns("changepoint"), "Find Change Point", value = FALSE)),
     div(plotlyOutput(ns("plot1")))
   )
 }
