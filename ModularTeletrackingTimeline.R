@@ -35,7 +35,7 @@ TeletrackingTimelineUI <- function(id) {
   units <- pgsrc %>%
     tbl("teletrackingtransfers") %>%
     select(OccupiedLocationNurseStationADTID) %>%
-    collect %>% 
+    collect(n = Inf) %>% 
     unique
 
   ## for mutliple Output use fillCol/fillRow(), or flowLayout() wrapped around Outputes
@@ -48,31 +48,35 @@ TeletrackingTimelineUI <- function(id) {
 TeletrackingTimelineServer <- function(input, output, session, date_range) {
   
   out <- reactive({
-    
-    dat <- pgsrc %>%
-      tbl("teletrackingtransfers") %>%
-      filter(PatientADTDischargeDateTimeUTC > date_range[1] & 
+
+      dat <- pgsrc %>%
+        tbl("teletrackingtransfers") %>%
+        filter(PatientADTDischargeDateTimeUTC > date_range[1] & 
                PatientADTDischargeDateTimeUTC < date_range[2] &
-               !is.na(PatientAdmitDateTimeUTC) &
-               OccupiedLocationNurseStationADTID %in% input$unit_id) %>%
-      collect %>%
-      arrange(PatientDetailPatientVisitNumber, OccupyDateTimeUTC) %>%
-      group_by(PatientDetailPatientVisitNumber) %>%
-      mutate(OccupyDateTimeLag = lead(OccupyDateTimeUTC, 1)) %>%
-      mutate(OccupyDateTimeLag = ifelse(is.na(OccupyDateTimeLag), PatientADTDischargeDateTimeUTC, OccupyDateTimeLag)) %>%
-      mutate(OccupyDateTimeLag = as.POSIXct(OccupyDateTimeLag, origin = "1970-01-01")) %>% 
-      filter(!is.na(OccupyDateTimeUTC)) %>%
-      ungroup %>%
-      select(content = OccupiedLocationRoomADTID,
-             start = OccupyDateTimeUTC,
-             end = OccupyDateTimeLag,
-             group = OccupiedLocationNurseStationADTID) %>%
-      arrange(group, start) %>%
-      mutate(id = 1 : n()) %>%
-      select(id, everything())
+               !is.na(PatientAdmitDateTimeUTC)) %>%
+        collect(n = Inf) %>%
+        arrange(PatientDetailPatientVisitNumber, OccupyDateTimeUTC) %>%
+        group_by(PatientDetailPatientVisitNumber) %>%
+        mutate(OccupyDateTimeLag = lead(OccupyDateTimeUTC, 1)) %>%
+        mutate(OccupyDateTimeLag = ifelse(is.na(OccupyDateTimeLag), PatientADTDischargeDateTimeUTC, OccupyDateTimeLag)) %>%
+        mutate(OccupyDateTimeLag = as.POSIXct(OccupyDateTimeLag, origin = "1970-01-01")) %>% 
+        filter(!is.na(OccupyDateTimeUTC)) %>%
+        ungroup
+        
+        if( !is.null(input$unit_id) ) dat %<>% filter(OccupiedLocationNurseStationADTID %in% input$unit_id)
+        
+        dat %<>% 
+          select(content = OccupiedLocationRoomADTID,
+                 start = OccupyDateTimeUTC,
+                 end = OccupyDateTimeLag,
+                 group = OccupiedLocationNurseStationADTID) %>%
+        arrange(group, start) %>%
+        mutate(id = 1 : n()) %>%
+        select(id, everything())
     
-    dbDisconnect(con)
-    dat
+      dbDisconnect(con)
+      
+      dat
     
   })
   

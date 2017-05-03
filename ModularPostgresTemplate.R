@@ -26,7 +26,7 @@ con <- read.csv( '/projects/creds.csv', stringsAsFactors = FALSE ) %$%
 
 
 # MODULE UI
-PostgresTemplateUI <- function(id) {
+**PostgresTemplate**UI <- function(id) {
   ns <- NS(id)
 
   ## Ui Outputs Here from server below
@@ -43,12 +43,12 @@ PostgresTemplateUI <- function(id) {
 
 
 # MODULE Server
-PostgresTemplateServer <- function(input, output, session, outside_inputs...) {
+**PostgresTemplate**Server <- function(input, output, session, outside_inputs...) {
   
   out <- reactive({
     
     dat <- pgsrc %>%
-      tbl("*Postgres Table Name*") %>%
+      tbl("**Postgres Table Name**") %>%
       filter( ) %>%
       collect %>%
       mutate( ) %>%

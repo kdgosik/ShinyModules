@@ -1,20 +1,23 @@
 library(shiny)
 rm(list=ls()); gc(reset = TRUE)
-source("ModularControlChart.R")
-
+source("ModularOneVarPlot.R")
+source("ModularTeletrackingTimeline.R")
+source("ModularDataView.R")
 
 ui <- fluidPage(
   
-  ControlChartUI("spc_id")
-  
+ TeletrackingTimelineUI("tele"),
+ DataViewUI("view")
+ 
 )
 
 
 server <- function(input, output, session) {
 
-  Data <- reactive({mtcars})
+  Data <- callModule(TeletrackingTimelineServer, "tele", date_range = c("2017-01-01", "2017-01-07"))
+    # reactive({mtcars})
   
-  callModule(ControlChartServer, "spc_id", data = Data)
+  callModule(DataViewServer, "view", data = Data, data_out_name = "tele")
 
 }
 
