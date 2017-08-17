@@ -1,12 +1,11 @@
 library(shiny)
 rm(list=ls()); gc(reset = TRUE)
-source("ModularOneVarPlot.R")
-source("ModularTeletrackingTimeline.R")
+source("ModularRbokehMultipleScatter.R")
 source("ModularDataView.R")
 
 ui <- fluidPage(
   
- TeletrackingTimelineUI("tele"),
+ RbokehMultipleScatterUI("scatter"),
  DataViewUI("view")
  
 )
@@ -14,10 +13,10 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
 
-  Data <- callModule(TeletrackingTimelineServer, "tele", date_range = c("2017-01-01", "2017-01-07"))
-    # reactive({mtcars})
+  Data <- reactive({iris})
   
   callModule(DataViewServer, "view", data = Data, data_out_name = "tele")
+  callModule(RbokehMultipleScatterServer, "scatter", data = Data)
 
 }
 
